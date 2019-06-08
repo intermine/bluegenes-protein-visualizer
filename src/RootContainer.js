@@ -1,5 +1,6 @@
 import React from 'react';
 import pv from 'bio-pv';
+import Loading from './Loading';
 import queryGeneToProtein from './queries/geneToProtein';
 import queryAccessionToPdb from './queries/accessionToPdb';
 
@@ -83,16 +84,25 @@ class RootContainer extends React.Component {
 				</div>
 			));
 
+		if (!PdbIdList)
+			return (
+				<div className="rootContainer">
+					<Loading text="Fetching associated PDB ids" />
+				</div>
+			);
+
 		return (
 			<div className="rootContainer">
 				{this.state.structureReady ? (
 					<div className="viz-container" ref={this.visualizer} />
 				) : (
-					<div className="viz-container">Loading...</div>
+					<div className="viz-container">
+						<Loading text="Initialising Visualizer..." />
+					</div>
 				)}
 				<div className="select-box">
 					<span className="heading">Select a PDB ID</span>
-					{PdbIdList || 'Loading...'}
+					{PdbIdList}
 				</div>
 			</div>
 		);
