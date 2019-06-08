@@ -16,7 +16,11 @@ function queryData(accessionId) {
 		return res.text().then(text => {
 			const ids = text.split('\n');
 			ids.splice(-1);
-			return ids.map(id => id.split(':')[0]);
+
+			// get the four character pdb id
+			return ids
+				.map(id => id.split(':')[0])
+				.filter(id => String(id).length === 4);
 		});
 	});
 }
