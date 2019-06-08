@@ -1,5 +1,6 @@
 import React from 'react';
 import queryGeneToProtein from './queries/geneToProtein';
+import accessionToPdb from './queries/accessionToPdb';
 
 class RootContainer extends React.Component {
 	componentDidMount() {
@@ -9,9 +10,9 @@ class RootContainer extends React.Component {
 		} = this.props;
 
 		// get all proteins with their accession ids associated with the gene
-		queryGeneToProtein(geneId, serviceUrl).then(() => {
-			// const { proteins } = res;
-			// console.log(proteins.map(p => p.primaryAccession));
+		queryGeneToProtein(geneId, serviceUrl).then(res => {
+			const { proteins } = res;
+			accessionToPdb(proteins[0].primaryAccession).then(() => {});
 		});
 
 		// get pdb file for each protein
