@@ -11,10 +11,43 @@
 
   // this is just an example class for root div element, you may modify or delete it as per your usecase
 	.rootContainer {
+		font-family: sans-serif;
 		border: 1px solid black;
 		padding: 20px;
 
 		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
 		
+		.viz-container {
+			width: 60%;
+			height: 500px;
+		}
+
+		.select-box {
+			width: 30%;
+			padding: 30px;
+			border: 1px solid lightgrey;
+			padding: 10px;
+			display: flex;
+			flex-direction: column;
+
+			
+			.heading {
+				font-size: 22px;
+				font-weight: 300;
+				margin-bottom: 16px;
+			}
+
+			.option {
+				cursor: pointer;
+				padding: 10px 2px;
+				font-size: 16px;
+				text-align: center;
+			}
+			.option.selected {
+				background: lightgrey;
+			}
+		}
 	}
 }
