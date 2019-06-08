@@ -12,7 +12,13 @@ function queryData(accessionId) {
 			</orgPdbQuery>
 			`,
 		headers: headers
-	}).then(res => res.text());
+	}).then(res => {
+		return res.text().then(text => {
+			const ids = text.split('\n');
+			ids.splice(-1);
+			return ids.map(id => id.split(':')[0]);
+		});
+	});
 }
 
 export default queryData;
