@@ -1,7 +1,6 @@
-function queryData(accessionId) {
-	const headers = new Headers();
-	headers.append('Accept', '*/*');
-	headers.append('Content-Type', 'application/x-www-form-urlencoded');
+// dependency injections - `fetch`
+function queryData(accessionId, fetch) {
+	if (!fetch) fetch = window.fetch;
 	return fetch('http://www.rcsb.org/pdb/rest/search?req=browser', {
 		method: 'POST',
 		body: `
@@ -11,7 +10,10 @@ function queryData(accessionId) {
 				<accessionIdList>${accessionId}</accessionIdList>
 			</orgPdbQuery>
 			`,
-		headers: headers
+		headers: {
+			Accept: '*/*',
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
 	}).then(res => {
 		return res.text().then(text => {
 			const ids = text.split('\n');
@@ -25,4 +27,4 @@ function queryData(accessionId) {
 	});
 }
 
-export default queryData;
+module.exports = queryData;
