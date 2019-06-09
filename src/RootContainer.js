@@ -11,7 +11,8 @@ class RootContainer extends React.Component {
 		this.state = {
 			structureReady: true,
 			pdbIds: null,
-			selectedId: 0
+			selectedId: 0,
+			viewerMode: 'cartoon'
 		};
 		this.initVisualizer = this.initVisualizer.bind(this);
 	}
@@ -49,10 +50,15 @@ class RootContainer extends React.Component {
 						slabMode: 'auto'
 					});
 
-					const go = viewer.cartoon('structure', structure, {
-						color: pv.color.ssSuccession(),
-						showRelated: '1'
-					});
+					const go = viewer.renderAs(
+						'structure',
+						structure,
+						this.state.viewerMode,
+						{
+							color: pv.color.ssSuccession(),
+							showRelated: '1'
+						}
+					);
 
 					// find camera orientation such that the molecules biggest extents are
 					// aligned to the screen plane.
@@ -73,6 +79,14 @@ class RootContainer extends React.Component {
 		this.initVisualizer(null, idIndex);
 	}
 
+	changeMode(ev) {
+		this.setState({ viewerMode: ev.target.value }, () => {
+			this.visualizer.current.innerHTML = '';
+			this.setState({ structureReady: false });
+			this.initVisualizer();
+		});
+	}
+
 	render() {
 		const PdbIdList =
 			this.state.pdbIds &&
@@ -85,6 +99,20 @@ class RootContainer extends React.Component {
 					{id}
 				</div>
 			));
+
+		const ViewerModes = [
+			'sline',
+			'lines',
+			'trace',
+			'lineTrace',
+			'cartoon',
+			'tube',
+			'spheres'
+		].map(m => (
+			<option key={m} value={m}>
+				{m}
+			</option>
+		));
 
 		if (!PdbIdList)
 			return (
@@ -103,6 +131,14 @@ class RootContainer extends React.Component {
 					</div>
 				)}
 				<div className="select-box">
+					<span className="heading">Select Viewer Mode</span>
+					<select
+						placeholder="Select viewer mode"
+						className="viewer-select"
+						onChange={this.changeMode.bind(this)}
+					>
+						{ViewerModes}
+					</select>
 					<span className="heading">Select a PDB ID</span>
 					{PdbIdList}
 				</div>
