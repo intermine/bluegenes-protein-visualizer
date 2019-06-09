@@ -20,8 +20,12 @@ class RootContainer extends React.Component {
 	componentDidMount() {
 		const {
 			entity: { value: geneId },
-			serviceUrl
+			serviceUrl,
+			testing
 		} = this.props;
+
+		// if mode is `testing` don't do cals
+		if (testing) return;
 
 		this.setState({ structureReady: false });
 		queryGeneToProtein(geneId, serviceUrl).then(res => {
