@@ -1,6 +1,7 @@
 #  BlueGenes Protein Visualizer
 
 BlueGenes Protein Visualizer is a tool made for [BlueGenes](http://bluegenes.apps.intermine.org) following BlueGenes Tool API. It can help users (biologists) to visualize protein structures in different types of viewer in 3D. Users can select the PDB id they want to visualize and the visualizer fetches PDBs from the [rcsb org](https://www.rcsb.org/).
+It can also be used as standalone tool to integrate in any web application.
 
 ## Licence
 
