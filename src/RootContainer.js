@@ -68,6 +68,8 @@ class RootContainer extends React.Component {
 
 	updateSelected(idIndex) {
 		this.setState({ selectedId: idIndex });
+		this.visualizer.current.innerHTML = '';
+		this.setState({ structureReady: false });
 		this.initVisualizer(null, idIndex);
 	}
 
