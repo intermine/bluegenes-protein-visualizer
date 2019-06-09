@@ -62,24 +62,8 @@ describe('queries', () => {
 			return queryRes.then(ids => {
 				expect(ids).toBeInstanceOf(Array);
 				expect(ids.length).toBeGreaterThanOrEqual(1);
-				// ids.forEach(id => expect(id.length).toBe(4));
+				ids.forEach(id => expect(id.length).toBe(4));
 			});
 		});
-
-		// test('should throw error if no sequence associated with the given protein accession id', () => {
-		// 	const wrongMockData = Object.assign({}, mockData, {
-		// 		proteinAccessionId: '1100005' // some wrong protein accession id
-		// 	});
-
-		// 	const queryRes = accessionToPdbQuery(
-		// 		wrongMockData.proteinAccessionId,
-		// 		wrongMockData.serviceUrl,
-		// 		imjs
-		// 	);
-
-		// 	return expect(queryRes).rejects.toBe(
-		// 		'No protein associated with passed `primaryAccession`!'
-		// 	);
-		// });
 	});
 });
