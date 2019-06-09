@@ -1,8 +1,10 @@
 #  BlueGenes Protein Visualizer
 
-FIXME: fill out a description of your tool here! :)
+BlueGenes Protein Visualizer is a tool made for [BlueGenes](http://bluegenes.apps.intermine.org) following BlueGenes Tool API. It can help users (biologists) to visualize protein structures in different types of viewer in 3D. Users can select the PDB id they want to visualize and the visualizer fetches PDBs from the [rcsb org](https://www.rcsb.org/).
 
 ## Licence
+
+MIT
 
 
 ### To set up locally for development
@@ -39,15 +41,9 @@ npm run build
 - More pre-configured rules from __eslint:recommended__ you must follow to not get errors [here](https://eslint.org/docs/rules/).
 
 ##### Developing:
-Run each of these commands in separate terminals:
 
-To rebuild your js every time you save:
+To serve your code at [localhost:3456](http://localhost:3456) and rebuild it every time it changes, run:
 
 ```bash
 npm run dev
-```
-
-To serve your page at [http://localhost:3456](http://localhost:3456):
-```bash
-npm run server
 ```
