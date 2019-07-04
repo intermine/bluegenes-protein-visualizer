@@ -12,7 +12,8 @@ class RootContainer extends React.Component {
 			structureReady: true,
 			pdbIds: null,
 			selectedId: 0,
-			viewerMode: 'cartoon'
+			viewerMode: 'cartoon',
+			error: null
 		};
 		this.initVisualizer = this.initVisualizer.bind(this);
 	}
@@ -28,13 +29,23 @@ class RootContainer extends React.Component {
 		if (testing) return;
 
 		this.setState({ structureReady: false });
-		queryGeneToProtein(geneId, serviceUrl).then(res => {
-			const { proteins } = res;
-			queryAccessionToPdb(proteins[0].primaryAccession).then(ids => {
-				this.setState({ pdbIds: ids });
-				this.initVisualizer(ids);
-			});
-		});
+		queryGeneToProtein(geneId, serviceUrl)
+			.then(res => {
+				const { proteins } = res;
+				queryAccessionToPdb(proteins[0].primaryAccession)
+					.then(ids => {
+						this.setState({ pdbIds: ids });
+						this.initVisualizer(ids);
+					})
+					.catch(error => {
+						error =
+							typeof error === 'string'
+								? error
+								: 'Could not download PDB file, please try again later!';
+						this.setState({ error });
+					});
+			})
+			.catch(error => this.setState({ error }));
 	}
 
 	initVisualizer(ids, selectedId) {
@@ -117,6 +128,9 @@ class RootContainer extends React.Component {
 				{m}
 			</option>
 		));
+
+		if (this.state.error)
+			return <div className="viz-container error">{this.state.error}</div>;
 
 		if (!PdbIdList)
 			return (
