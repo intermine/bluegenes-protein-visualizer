@@ -11,10 +11,14 @@ class RootContainer extends React.Component {
 		this.state = {
 			structureReady: true,
 			pdbIds: null,
+			filteredPdbIds: null,
 			selectedId: 0,
-			viewerMode: 'cartoon'
+			viewerMode: 'cartoon',
+			error: null,
+			searchedId: ''
 		};
 		this.initVisualizer = this.initVisualizer.bind(this);
+		this.handleSearch = this.handleSearch.bind(this);
 	}
 
 	componentDidMount() {
@@ -28,13 +32,26 @@ class RootContainer extends React.Component {
 		if (testing) return;
 
 		this.setState({ structureReady: false });
-		queryGeneToProtein(geneId, serviceUrl).then(res => {
-			const { proteins } = res;
-			queryAccessionToPdb(proteins[0].primaryAccession).then(ids => {
-				this.setState({ pdbIds: ids });
-				this.initVisualizer(ids);
-			});
-		});
+		queryGeneToProtein(geneId, serviceUrl)
+			.then(res => {
+				const { proteins } = res;
+				queryAccessionToPdb(proteins[0].primaryAccession)
+					.then(ids => {
+						this.setState({
+							pdbIds: ids,
+							filteredPdbIds: ids
+						});
+						this.initVisualizer(ids);
+					})
+					.catch(error => {
+						error =
+							typeof error === 'string'
+								? error
+								: 'Could not download PDB file, please try again later!';
+						this.setState({ error });
+					});
+			})
+			.catch(error => this.setState({ error }));
 	}
 
 	initVisualizer(ids, selectedId) {
@@ -91,12 +108,21 @@ class RootContainer extends React.Component {
 		});
 	}
 
+	handleSearch(ev) {
+		const { value } = ev.target;
+		this.setState({
+			filteredPdbIds: this.state.pdbIds.filter(
+				id => id.toLowerCase().indexOf(value.toLowerCase()) !== -1
+			)
+		});
+	}
+
 	render() {
 		const PdbIdList =
-			this.state.pdbIds &&
-			this.state.pdbIds.map((id, i) => (
+			this.state.filteredPdbIds &&
+			this.state.filteredPdbIds.map((id, i) => (
 				<div
-					key={id}
+					key={i}
 					className={`option ${this.state.selectedId == i && 'selected'}`}
 					onClick={() => this.updateSelected(i)}
 				>
@@ -117,6 +143,9 @@ class RootContainer extends React.Component {
 				{m}
 			</option>
 		));
+
+		if (this.state.error)
+			return <div className="viz-container error">{this.state.error}</div>;
 
 		if (!PdbIdList)
 			return (
@@ -143,8 +172,14 @@ class RootContainer extends React.Component {
 					>
 						{ViewerModes}
 					</select>
-					<span className="heading">Select a PDB ID</span>
-					{PdbIdList}
+					<input
+						className="heading"
+						placeholder="Search and Select a PDB ID"
+						onChange={this.handleSearch}
+					/>
+					<div style={{ maxHeight: 300, overflow: 'scroll' }}>
+						{PdbIdList.length ? PdbIdList : 'No search results!'}
+					</div>
 				</div>
 			</div>
 		);
