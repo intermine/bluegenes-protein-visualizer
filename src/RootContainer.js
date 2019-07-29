@@ -15,10 +15,12 @@ class RootContainer extends React.Component {
 			selectedId: 0,
 			viewerMode: 'cartoon',
 			error: null,
-			searchedId: ''
+			searchedId: '',
+			hoveredId: null
 		};
 		this.initVisualizer = this.initVisualizer.bind(this);
 		this.handleSearch = this.handleSearch.bind(this);
+		this.fetchTitle = this.fetchTitle.bind(this);
 	}
 
 	componentDidMount() {
@@ -42,6 +44,7 @@ class RootContainer extends React.Component {
 							filteredPdbIds: ids
 						});
 						this.initVisualizer(ids);
+						this.fetchTitle(ids[0]);
 					})
 					.catch(error => {
 						error =
@@ -94,10 +97,30 @@ class RootContainer extends React.Component {
 	}
 
 	updateSelected(idIndex) {
-		this.setState({ selectedId: idIndex });
+		this.setState({
+			selectedId: idIndex,
+			focusedIdTitle: '',
+			detailsLoading: true
+		});
+
+		// fetch title for the `id` clicked
+		const id = this.state.filteredPdbIds[idIndex];
+		this.fetchTitle(id);
+
 		this.visualizer.current.innerHTML = '';
 		this.setState({ structureReady: false });
 		this.initVisualizer(null, idIndex);
+	}
+
+	fetchTitle(id) {
+		fetch(`https://www.rcsb.org/pdb/json/describePDB?structureId=${id}`)
+			.then(res => res.json())
+			.then(res =>
+				this.setState({
+					detailsLoading: false,
+					focusedIdTitle: res[0].title
+				})
+			);
 	}
 
 	changeMode(ev) {
@@ -121,12 +144,22 @@ class RootContainer extends React.Component {
 		const PdbIdList =
 			this.state.filteredPdbIds &&
 			this.state.filteredPdbIds.map((id, i) => (
-				<div
-					key={i}
-					className={`option ${this.state.selectedId == i && 'selected'}`}
-					onClick={() => this.updateSelected(i)}
-				>
-					{id}
+				<div key={i}>
+					<div
+						className={`option ${this.state.selectedId == i && 'selected'}`}
+						onClick={() => this.updateSelected(i)}
+					>
+						{id}
+					</div>
+					{this.state.selectedId === i && (
+						<div style={{ display: 'flex', justifyContent: 'center' }}>
+							{this.state.detailsLoading ? (
+								<Loading />
+							) : (
+								<h3>{this.state.focusedIdTitle}</h3>
+							)}
+						</div>
+					)}
 				</div>
 			));
 
