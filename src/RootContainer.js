@@ -152,11 +152,21 @@ class RootContainer extends React.Component {
 						{id}
 					</div>
 					{this.state.selectedId === i && (
-						<div style={{ display: 'flex', justifyContent: 'center' }}>
+						<div className="details-panel">
 							{this.state.detailsLoading ? (
 								<Loading />
 							) : (
-								<h3>{this.state.focusedIdTitle}</h3>
+								<>
+									<h3>{this.state.focusedIdTitle}</h3>
+									<a
+										href={`https://www.rcsb.org/structure/${id}`}
+										rel="noopener noreferrer"
+										target="_blank"
+										className="title-text"
+									>
+										open RCSB page
+									</a>
+								</>
 							)}
 						</div>
 					)}
