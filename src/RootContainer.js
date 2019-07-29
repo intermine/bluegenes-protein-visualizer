@@ -133,11 +133,14 @@ class RootContainer extends React.Component {
 
 	handleSearch(ev) {
 		const { value } = ev.target;
-		this.setState({
-			filteredPdbIds: this.state.pdbIds.filter(
-				id => id.toLowerCase().indexOf(value.toLowerCase()) !== -1
-			)
-		});
+		this.setState(
+			{
+				filteredPdbIds: this.state.pdbIds.filter(
+					id => id.toLowerCase().indexOf(value.toLowerCase()) !== -1
+				)
+			},
+			() => this.fetchTitle(this.state.filteredPdbIds[0])
+		);
 	}
 
 	render() {
