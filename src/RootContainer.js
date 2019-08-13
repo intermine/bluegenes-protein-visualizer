@@ -3,6 +3,7 @@ import pv from 'bio-pv';
 import Loading from './Loading';
 import queryGeneToProtein from './queries/geneToProtein';
 import queryAccessionToPdb from './queries/accessionToPdb';
+import queryProteinIdToProtein from './queries/proteinIdToProtein';
 
 class RootContainer extends React.Component {
 	constructor(props) {
@@ -25,7 +26,7 @@ class RootContainer extends React.Component {
 
 	componentDidMount() {
 		const {
-			entity: { value: geneId },
+			entity: { value: entityId, class: entityClass },
 			serviceUrl,
 			testing
 		} = this.props;
@@ -34,27 +35,38 @@ class RootContainer extends React.Component {
 		if (testing) return;
 
 		this.setState({ structureReady: false });
-		queryGeneToProtein(geneId, serviceUrl)
-			.then(res => {
-				const { proteins } = res;
-				queryAccessionToPdb(proteins[0].primaryAccession)
-					.then(ids => {
-						this.setState({
-							pdbIds: ids,
-							filteredPdbIds: ids
-						});
-						this.initVisualizer(ids);
-						this.fetchTitle(ids[0]);
-					})
-					.catch(error => {
-						error =
-							typeof error === 'string'
-								? error
-								: 'Could not download PDB file, please try again later!';
-						this.setState({ error });
+
+		const getPdbsAndRender = primaryAccession => {
+			queryAccessionToPdb(primaryAccession)
+				.then(ids => {
+					this.setState({
+						pdbIds: ids,
+						filteredPdbIds: ids
 					});
-			})
-			.catch(error => this.setState({ error }));
+					this.initVisualizer(ids);
+					this.fetchTitle(ids[0]);
+				})
+				.catch(error => {
+					error =
+						typeof error === 'string'
+							? error
+							: 'Could not download PDB file, please try again later!';
+					this.setState({ error });
+				});
+		};
+
+		if (entityClass === 'Protein') {
+			queryProteinIdToProtein(entityId, serviceUrl).then(protein => {
+				getPdbsAndRender(protein.primaryAccession);
+			});
+		} else {
+			queryGeneToProtein(entityId, serviceUrl)
+				.then(res => {
+					const { proteins } = res;
+					getPdbsAndRender(proteins[0].primaryAccession);
+				})
+				.catch(error => this.setState({ error }));
+		}
 	}
 
 	initVisualizer(ids, selectedId) {
