@@ -226,6 +226,7 @@ class RootContainer extends React.Component {
 					<select
 						placeholder="Select viewer mode"
 						className="viewer-select"
+						value={this.state.viewerMode}
 						onChange={this.changeMode.bind(this)}
 					>
 						{ViewerModes}
