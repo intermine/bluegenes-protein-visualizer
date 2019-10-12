@@ -75,6 +75,10 @@ class RootContainer extends React.Component {
 		pv.io.fetchPdb(
 			`https://files.rcsb.org/download/${ids[selectedId]}.pdb`,
 			structure => {
+				if (!structure)
+					return this.setState({
+						error: 'No results found in RCSB Protein Data Bank'
+					});
 				this.setState({ structureReady: true }, () => {
 					// remove all current HTML from main element
 					// initialise protein visualizer with default init options
