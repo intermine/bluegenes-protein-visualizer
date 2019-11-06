@@ -1,8 +1,8 @@
 {
   "name": "@intermine/bluegenes-protein-visualizer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "src/index.js",
-  "description": "",
+  "description": "Visualize protein structures using different types of 3D models. You can select from multiple [RCSB](https://www.rcsb.org/) PDB ID.",
   "homepage": "http://www.intermine.org",
   "scripts": {
     "test": "jest",
