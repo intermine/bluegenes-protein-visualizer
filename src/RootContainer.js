@@ -15,6 +15,7 @@ class RootContainer extends React.Component {
 			filteredPdbIds: null,
 			selectedId: 0,
 			viewerMode: 'cartoon',
+			colorMode: 'uniform',
 			error: null,
 			searchedId: '',
 			hoveredId: null
@@ -83,6 +84,7 @@ class RootContainer extends React.Component {
 					// remove all current HTML from main element
 					// initialise protein visualizer with default init options
 					this.visualizer.current.innerHTML = '';
+					pv.color.bySS();
 					const viewer = pv.Viewer(this.visualizer.current, {
 						quality: 'medium',
 						antialias: true,
@@ -95,7 +97,10 @@ class RootContainer extends React.Component {
 						structure,
 						this.state.viewerMode,
 						{
-							color: pv.color.ssSuccession(),
+							color:
+								this.state.colorMode === 'uniform'
+									? pv.color.ssSuccession()
+									: pv.color.bySS(),
 							showRelated: '1'
 						}
 					);
@@ -139,12 +144,16 @@ class RootContainer extends React.Component {
 			);
 	}
 
-	changeMode(ev) {
+	changeViewerMode(ev) {
 		this.setState({ viewerMode: ev.target.value }, () => {
 			this.visualizer.current.innerHTML = '';
 			this.setState({ structureReady: false });
 			this.initVisualizer();
 		});
+	}
+
+	changeColoringMode(ev) {
+		this.setState({ colorMode: ev.target.value }, this.initVisualizer);
 	}
 
 	handleSearch(ev) {
@@ -160,9 +169,9 @@ class RootContainer extends React.Component {
 	}
 
 	render() {
-		const PdbIdList =
-			this.state.filteredPdbIds &&
-			this.state.filteredPdbIds.map((id, i) => (
+		let PdbIdList;
+		if (this.state.filteredPdbIds) {
+			PdbIdList = this.state.filteredPdbIds.map((id, i) => (
 				<div key={i}>
 					<div
 						className={`option ${this.state.selectedId == i && 'selected'}`}
@@ -175,7 +184,7 @@ class RootContainer extends React.Component {
 							{this.state.detailsLoading ? (
 								<Loading />
 							) : (
-								<>
+								<React.Fragment>
 									<h3>{this.state.focusedIdTitle}</h3>
 									<a
 										href={`https://www.rcsb.org/structure/${id}`}
@@ -185,12 +194,13 @@ class RootContainer extends React.Component {
 									>
 										open RCSB page
 									</a>
-								</>
+								</React.Fragment>
 							)}
 						</div>
 					)}
 				</div>
 			));
+		}
 
 		const ViewerModes = [
 			'sline',
@@ -201,6 +211,12 @@ class RootContainer extends React.Component {
 			'tube',
 			'spheres'
 		].map(m => (
+			<option key={m} value={m}>
+				{m}
+			</option>
+		));
+
+		const ColoringModes = ['uniform', 'By Secondary Structure'].map(m => (
 			<option key={m} value={m}>
 				{m}
 			</option>
@@ -231,9 +247,18 @@ class RootContainer extends React.Component {
 						placeholder="Select viewer mode"
 						className="viewer-select"
 						value={this.state.viewerMode}
-						onChange={this.changeMode.bind(this)}
+						onChange={this.changeViewerMode.bind(this)}
 					>
 						{ViewerModes}
+					</select>
+					<span className="heading">Select Coloring Mode</span>
+					<select
+						placeholder="Select viewer mode"
+						className="viewer-select"
+						// value={this.state.viewerMode}
+						onChange={this.changeColoringMode.bind(this)}
+					>
+						{ColoringModes}
 					</select>
 					<input
 						className="heading"
