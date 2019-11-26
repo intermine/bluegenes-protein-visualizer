@@ -71,8 +71,16 @@ class RootContainer extends React.Component {
 	}
 
 	initVisualizer(ids, selectedId) {
-		if (!ids) ids = this.state.pdbIds;
-		if (!selectedId) selectedId = this.state.selectedId;
+		const {
+			colorMode,
+			viewerMode,
+			pdbIds,
+			selectedId: stateSelectedId
+		} = this.state;
+
+		if (!ids) ids = pdbIds;
+		if (!selectedId) selectedId = stateSelectedId;
+
 		pv.io.fetchPdb(
 			`https://files.rcsb.org/download/${ids[selectedId]}.pdb`,
 			structure => {
@@ -80,30 +88,27 @@ class RootContainer extends React.Component {
 					return this.setState({
 						error: 'No results found in RCSB Protein Data Bank'
 					});
+
 				this.setState({ structureReady: true }, () => {
 					// remove all current HTML from main element
 					// initialise protein visualizer with default init options
-					this.visualizer.current.innerHTML = '';
-					pv.color.bySS();
-					const viewer = pv.Viewer(this.visualizer.current, {
+
+					const visualizer = this.visualizer.current;
+					visualizer.innerHTML = '';
+					const viewer = pv.Viewer(visualizer, {
 						quality: 'medium',
 						antialias: true,
 						outline: false,
 						slabMode: 'auto'
 					});
 
-					const go = viewer.renderAs(
-						'structure',
-						structure,
-						this.state.viewerMode,
-						{
-							color:
-								this.state.colorMode === 'uniform'
-									? pv.color.ssSuccession()
-									: pv.color.bySS(),
-							showRelated: '1'
-						}
-					);
+					const go = viewer.renderAs('structure', structure, viewerMode, {
+						color:
+							colorMode === 'uniform'
+								? pv.color.ssSuccession()
+								: pv.color.bySS(),
+						showRelated: '1'
+					});
 
 					// find camera orientation such that the molecules biggest extents are
 					// aligned to the screen plane.
