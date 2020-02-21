@@ -4,6 +4,7 @@ import Loading from './Loading';
 import queryGeneToProtein from './queries/geneToProtein';
 import queryAccessionToPdb from './queries/accessionToPdb';
 import queryProteinIdToProtein from './queries/proteinIdToProtein';
+import ColorTable from './ColorTable';
 
 class RootContainer extends React.Component {
 	constructor(props) {
@@ -272,6 +273,9 @@ class RootContainer extends React.Component {
 					/>
 					<div style={{ maxHeight: 300, overflow: 'scroll' }}>
 						{PdbIdList.length ? PdbIdList : 'No search results!'}
+					</div>
+					<div className='color-table'>
+						<ColorTable />
 					</div>
 				</div>
 			</div>

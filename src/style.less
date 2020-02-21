@@ -30,7 +30,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-evenly;
-		
+
 		.viz-container {
 			display: flex;
 			justify-content: center;
@@ -47,7 +47,7 @@
 			display: flex;
 			flex-direction: column;
 
-			
+
 			.viewer-select {
 				font-size: 24px;
 				margin-bottom: 20px;
@@ -67,6 +67,12 @@
 			}
 			.option.selected {
 				background: lightgrey;
+			}
+			
+			.color-table {
+				position: relative;
+				max-height: 200px;
+				overflow: scroll;
 			}
 		}
 	}
@@ -88,29 +94,29 @@
 					height: 1em;
 					background-color: #ADE394;
 				}
-	
+
 				span:nth-of-type(1) {
 					animation: grow 1s -0.45s ease-in-out infinite;
 				}
-	
+
 				span:nth-of-type(2) {
 					animation: grow 1s -0.3s ease-in-out infinite;
 				}
-	
+
 				span:nth-of-type(3) {
 					animation: grow 1s -0.15s ease-in-out infinite;
 				}
-	
+
 				span:nth-of-type(4) {
 					animation: grow 1s 0.15s ease-in-out infinite;
 				}
-	
+
 				@keyframes grow {
 					0%,
 					100% {
 						transform: scaleY(1);
 					}
-	
+
 					50% {
 						transform: scaleY(2);
 					}
