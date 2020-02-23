@@ -12,8 +12,8 @@ describe('main', () => {
 	test('should render loading immediately when intialised', () => {
 		const mockData = {
 			el: document.createElement('div'),
-			service: { root: 'http://www.humanmine.org/human' },
-			imEntity: { value: 1000006 },
+			service: { root: 'https://www.humanmine.org/humanmine' },
+			imEntity: { value: 1205472 },
 			state: { testing: true },
 			config: {}
 		};
