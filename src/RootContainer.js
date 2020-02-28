@@ -274,8 +274,8 @@ class RootContainer extends React.Component {
 					<div style={{ maxHeight: 300, overflow: 'scroll' }}>
 						{PdbIdList.length ? PdbIdList : 'No search results!'}
 					</div>
-					<div className='color-table'>
-						<ColorTable />
+					<div>
+						<ColorTable colorMode={this.state.colorMode} />
 					</div>
 				</div>
 			</div>
