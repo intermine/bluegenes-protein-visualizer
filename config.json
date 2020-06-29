@@ -1,5 +1,5 @@
 {
-  "accepts": ["id"]  ,
+  "accepts": ["id"],
   "classes":
     ["Gene", "Protein"]
   ,
@@ -18,5 +18,6 @@
   "toolName" : {
     "human" :"BlueGenes Protein Visualizer",
     "cljs" :"bluegenesProteinVisualizer"    
-  }
+  },
+  "version": 2
 }
