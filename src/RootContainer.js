@@ -57,7 +57,7 @@ class RootContainer extends React.Component {
 				});
 		};
 
-		if (entityClass === 'Protein') {
+		if (entityClass.Protein) {
 			queryProteinIdToProtein(entityId, serviceUrl).then(protein => {
 				getPdbsAndRender(protein.primaryAccession);
 			});
