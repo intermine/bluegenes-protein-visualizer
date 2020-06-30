@@ -6,7 +6,10 @@
   "columnMapping": {
     "Gene": {
       "id": "primaryIdentifier"
-    }
+    },
+    "Protein" : {
+      "id": "primaryAccession"
+    } 
   },
   "files" : {
     "css" : "dist/style.css",
