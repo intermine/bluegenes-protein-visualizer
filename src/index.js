@@ -8,15 +8,28 @@ function main(el, service, imEntity, state, config) {
 	if (!el || !service || !imEntity || !state || !config) {
 		throw new Error('Call main with correct signature');
 	}
-	ReactDOM.render(
-		<RootContainer
-			serviceUrl={service.root}
-			entity={imEntity}
-			config={config}
-			testing={state.testing}
-		/>,
-		el
-	);
+
+	if(imEntity.Gene){ 
+		ReactDOM.render(
+			<RootContainer
+				serviceUrl={service.root}
+				entity={imEntity.Gene}
+				config={config}
+				testing={state.testing}
+			/>,
+			el
+		);
+	} else {
+		ReactDOM.render(
+			<RootContainer
+				serviceUrl={service.root}
+				entity={imEntity.Protein}
+				config={config}
+				testing={state.testing}
+			/>,
+			el
+		);
+	} 
 }
 
 export { main };
