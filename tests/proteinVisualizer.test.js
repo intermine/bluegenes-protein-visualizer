@@ -55,7 +55,7 @@ describe('queries', () => {
 	describe('proteinId -> protein', () => {
 		const mockData = {
 			proteinId: '20274371',
-			serviceUrl: 'http://www.humanmine.org/human'
+			serviceUrl: 'https://www.humanmine.org/humanmine'
 		};
 
 		test('should return a promise resolving with correct protein', () => {
