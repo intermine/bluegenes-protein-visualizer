@@ -73,13 +73,19 @@ class RootContainer extends React.Component {
 		} else {
 			queryGeneToProtein(entityId, serviceUrl)
 				.then(res => {
-					const { proteins } = res;
-					proteins.sort((a, b) => a.length - b.length);
-					const canonicalProtein = proteins.filter(p =>
-						isUniProtAccession(p.primaryAccession)
-					)[0];
+					const accessions = res.proteins.map(p => p.primaryAccession);
+					// Shorter form more likely to give results for PDB.
+					accessions.sort((a, b) => a.length - b.length);
+					// Isoforms have a dash followed by a number in their name.
+					const accessionsWithoutIsoforms = accessions.filter(
+						isUniProtAccession
+					);
+					// P* form most likely to give results for PDB.
+					const startsWithP = accessionsWithoutIsoforms.filter(s =>
+						s.startsWith('P')
+					);
 					getPdbsAndRender(
-						canonicalProtein.primaryAccession || proteins[0].primaryAccession
+						startsWithP[0] || accessionsWithoutIsoforms[0] || accessions[0]
 					);
 				})
 				.catch(error => this.setState({ error }));
