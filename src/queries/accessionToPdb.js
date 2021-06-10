@@ -37,7 +37,7 @@ function queryData(accessionId, fetch) {
 		)
 	)
 		.then(res => {
-			if (!res.ok) throw 'No relevant results returned from PDB.';
+			if (res.status !== 200) throw 'No relevant results returned from PDB.';
 			return res.json();
 		})
 		.then(data => {
