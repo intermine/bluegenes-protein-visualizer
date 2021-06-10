@@ -6,6 +6,15 @@ import queryAccessionToPdb from './queries/accessionToPdb';
 import queryProteinIdToProtein from './queries/proteinIdToProtein';
 import ColorTable from './ColorTable';
 
+function isUniProtAccession(accession) {
+	// https://www.uniprot.org/help/accession_numbers
+	return (
+		accession.match(
+			/^([OPQ][0-9][A-Z0-9]{3}[0-9]|[A-NR-Z][0-9]([A-Z][A-Z0-9]{2}[0-9]){1,2})$/
+		) !== null
+	);
+}
+
 class RootContainer extends React.Component {
 	constructor(props) {
 		super(props);
@@ -52,7 +61,7 @@ class RootContainer extends React.Component {
 					error =
 						typeof error === 'string'
 							? error
-							: 'Could not download PDB file, please try again later!';
+							: 'Failed to reach PDB. Please try again later.';
 					this.setState({ error });
 				});
 		};
@@ -65,7 +74,13 @@ class RootContainer extends React.Component {
 			queryGeneToProtein(entityId, serviceUrl)
 				.then(res => {
 					const { proteins } = res;
-					getPdbsAndRender(proteins[0].primaryAccession);
+					proteins.sort((a, b) => a.length - b.length);
+					const canonicalProtein = proteins.filter(p =>
+						isUniProtAccession(p.primaryAccession)
+					)[0];
+					getPdbsAndRender(
+						canonicalProtein.primaryAccession || proteins[0].primaryAccession
+					);
 				})
 				.catch(error => this.setState({ error }));
 		}
@@ -140,12 +155,16 @@ class RootContainer extends React.Component {
 	}
 
 	fetchTitle(id) {
-		fetch(`https://www.rcsb.org/pdb/json/describePDB?structureId=${id}`)
+		fetch(
+			'https://data.rcsb.org/graphql?query='.concat(
+				encodeURIComponent(`{entry(entry_id:"${id}"){struct{title}}}`)
+			)
+		)
 			.then(res => res.json())
-			.then(res =>
+			.then(data =>
 				this.setState({
 					detailsLoading: false,
-					focusedIdTitle: res[0].title
+					focusedIdTitle: data.data.entry.struct.title
 				})
 			);
 	}

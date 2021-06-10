@@ -1,30 +1,25 @@
-const queryGeneToProtein = proteinId => ({
-	name: 'Protein_Sequence',
-	title: 'Protein --> Sequence',
-	description:
-		'for a specified protein or list proteins give the protein sequence and length.',
+const queryProteinToAccession = proteinId => ({
+	description: 'for a specified protein give its identifer and accession.',
 	from: 'Protein',
 	select: ['primaryIdentifier', 'primaryAccession'],
 	where: [
 		{
 			path: 'Protein.id',
 			op: '=',
-			value: proteinId,
-			switched: 'LOCKED',
-			switchable: false
+			value: proteinId
 		}
 	]
 });
 
 // eslint-disable-next-line
-function queryData(geneId, serviceUrl, imjsClient = imjs) {
+function queryData(proteinId, serviceUrl, imjsClient = imjs) {
 	return new Promise((resolve, reject) => {
 		const service = new imjsClient.Service({ root: serviceUrl });
 		service
-			.records(queryGeneToProtein(geneId))
+			.records(queryProteinToAccession(proteinId))
 			.then(data => {
 				if (data.length) resolve(data[0]);
-				else reject('No associated proteins found!');
+				else reject('Protein not found.');
 			})
 			.catch(reject);
 	});
