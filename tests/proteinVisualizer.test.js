@@ -16,7 +16,7 @@ beforeEach(() => {
 describe('queries', () => {
 	describe('gene -> protein', () => {
 		const mockData = {
-			geneId: '1205472',
+			geneId: '1145104',
 			serviceUrl: 'https://www.humanmine.org/humanmine'
 		};
 
@@ -39,7 +39,7 @@ describe('queries', () => {
 
 		test('should throw error if no protein associated with the given gene id', () => {
 			const wrongMockData = Object.assign({}, mockData, {
-				geneId: '1100005' // some wrong gene id
+				geneId: '1100000' // some wrong gene id
 			});
 
 			const queryRes = geneToProteinQuery(
@@ -48,13 +48,13 @@ describe('queries', () => {
 				imjs
 			);
 
-			return expect(queryRes).rejects.toBe('No associated proteins found!');
+			return expect(queryRes).rejects.toBe('No associated proteins found.');
 		});
 	});
 
 	describe('proteinId -> protein', () => {
 		const mockData = {
-			proteinId: '20274371',
+			proteinId: '21035748',
 			serviceUrl: 'https://www.humanmine.org/humanmine'
 		};
 
@@ -73,9 +73,9 @@ describe('queries', () => {
 			});
 		});
 
-		test('should throw error if no protein associated with the given gene id', () => {
+		test('should throw error if no protein associated with the given protein id', () => {
 			const wrongMockData = Object.assign({}, mockData, {
-				proteinId: '20274372' // some wrong gene id
+				proteinId: '20274300' // some wrong protein id
 			});
 
 			const queryRes = proteinIdToProteinQuery(
@@ -84,13 +84,13 @@ describe('queries', () => {
 				imjs
 			);
 
-			return expect(queryRes).rejects.toBe('No associated proteins found!');
+			return expect(queryRes).rejects.toBe('Protein not found.');
 		});
 	});
 
 	describe('accession -> ids', () => {
 		const mockData = {
-			proteinAccessionId: 'Q8IZ69'
+			proteinAccessionId: 'P15976'
 		};
 		test('should return a promise resolving with correct pdb ids', () => {
 			const queryRes = accessionToPdbQuery(mockData.proteinAccessionId, fetch);
