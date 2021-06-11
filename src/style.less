@@ -1,5 +1,7 @@
 .bluegenesProteinVisualizer {
-	font-family: sans-serif;
+    span, option, .viewer-select {
+        color: black;
+    }
 
 	.details-panel {
 		display: flex;
@@ -8,9 +10,12 @@
 		align-items: center;
 		border: 1px solid lightgrey;
 		padding: 10px;
-		.title-text {
+
+		.pdb-link {
+            margin-top: 5px;
 			font-size: 14px;
 			font-weight: 300;
+            text-decoration: underline;
 		}
 	}
 
@@ -23,7 +28,6 @@
 
 	.rootContainer {
 		font-family: sans-serif;
-		border: 1px solid black;
 		padding: 20px;
 
 		display: flex;
@@ -47,26 +51,34 @@
 			flex-direction: column;
 
 			.viewer-select {
-				font-size: 24px;
 				margin-bottom: 20px;
 			}
 
 			.heading {
-				font-size: 22px;
 				font-weight: 300;
-				margin-bottom: 16px;
+                margin-right: 10px;
 			}
 
 			.option {
 				cursor: pointer;
 				padding: 10px 2px;
-				font-size: 16px;
 				text-align: center;
 			}
 			.option.selected {
 				background: lightgrey;
 			}
+
+            .input-row {
+                display: flex;
+                flex-wrap: nowrap;
+            }
 		}
+
+        .structure-list {
+            max-height: 250px;
+            overflow: auto;
+            border-bottom: 1px solid lightgrey;
+        }
 	}
 
 	.loading-container {
@@ -123,13 +135,13 @@
 
 	.color-table {
 		position: relative;
-		max-height: 150px;
-		overflow: scroll;
+		max-height: 100px;
+		overflow: auto;
 		.color-table-box {
 			border: thin solid grey;
 			height: 10px;
 			width: 10px;
-			margin: 0px 0px 0px 0px;
+			margin: 0px 5px 0px 0px;
 		}
 	}	
 }

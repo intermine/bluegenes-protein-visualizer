@@ -112,7 +112,7 @@ class RootContainer extends React.Component {
 			structure => {
 				if (!structure)
 					return this.setState({
-						error: 'No results found in RCSB Protein Data Bank'
+						error: 'No structure found in RCSB Protein Data Bank'
 					});
 
 				this.setState({ structureReady: true }, () => {
@@ -220,14 +220,14 @@ class RootContainer extends React.Component {
 								<Loading />
 							) : (
 								<React.Fragment>
-									<h3>{this.state.focusedIdTitle}</h3>
+									<span>{this.state.focusedIdTitle}</span>
 									<a
 										href={`https://www.rcsb.org/structure/${id}`}
 										rel="noopener noreferrer"
 										target="_blank"
-										className="title-text"
+										className="pdb-link"
 									>
-										open RCSB page
+										open PDB page
 									</a>
 								</React.Fragment>
 							)}
@@ -263,7 +263,7 @@ class RootContainer extends React.Component {
 		if (!PdbIdList)
 			return (
 				<div className="rootContainer">
-					<Loading text="Fetching associated PDB ids" />
+					<Loading text="Fetching associated PDB entities" />
 				</div>
 			);
 
@@ -277,30 +277,34 @@ class RootContainer extends React.Component {
 					</div>
 				)}
 				<div className="select-box">
-					<span className="heading">Select Viewer Mode</span>
-					<select
-						placeholder="Select viewer mode"
-						className="viewer-select"
-						value={this.state.viewerMode}
-						onChange={this.changeViewerMode.bind(this)}
-					>
-						{ViewerModes}
-					</select>
-					<span className="heading">Select Coloring Mode</span>
-					<select
-						placeholder="Select viewer mode"
-						className="viewer-select"
-						// value={this.state.viewerMode}
-						onChange={this.changeColoringMode.bind(this)}
-					>
-						{ColoringModes}
-					</select>
+					<div className="input-row">
+						<span className="heading">Select viewer:</span>
+						<select
+							placeholder="Select viewer mode"
+							className="viewer-select"
+							value={this.state.viewerMode}
+							onChange={this.changeViewerMode.bind(this)}
+						>
+							{ViewerModes}
+						</select>
+					</div>
+					<div className="input-row">
+						<span className="heading">Select coloring:</span>
+						<select
+							placeholder="Select coloring mode"
+							className="viewer-select"
+							value={this.state.colorMode}
+							onChange={this.changeColoringMode.bind(this)}
+						>
+							{ColoringModes}
+						</select>
+					</div>
 					<input
 						className="heading"
-						placeholder="Search and Select a PDB ID"
+						placeholder="Filter PDB entities"
 						onChange={this.handleSearch}
 					/>
-					<div style={{ maxHeight: 300, overflow: 'scroll' }}>
+					<div className="structure-list">
 						{PdbIdList.length ? PdbIdList : 'No search results!'}
 					</div>
 					<div>

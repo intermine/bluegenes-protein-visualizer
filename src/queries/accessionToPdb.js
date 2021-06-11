@@ -37,7 +37,9 @@ function queryData(accessionId, fetch) {
 		)
 	)
 		.then(res => {
-			if (res.status !== 200) throw 'No relevant results returned from PDB.';
+			if (res.status !== 200) {
+				throw 'PDB returned no entities for UniProtKB accession ' + accessionId;
+			}
 			return res.json();
 		})
 		.then(data => {
