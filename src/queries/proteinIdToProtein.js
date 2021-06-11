@@ -1,7 +1,8 @@
 const queryProteinToAccession = proteinId => ({
 	description: 'for a specified protein give its identifer and accession.',
 	from: 'Protein',
-	select: ['primaryIdentifier', 'primaryAccession'],
+	select: ['primaryAccession', 'canonicalProtein.primaryAccession'],
+	joins: ['canonicalProtein'],
 	where: [
 		{
 			path: 'Protein.id',
