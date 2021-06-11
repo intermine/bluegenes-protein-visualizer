@@ -26,6 +26,6 @@ describe('main', () => {
 			mockData.config
 		);
 
-		expect(mockData.el.innerHTML).toContain('Fetching associated PDB ids');
+		expect(mockData.el.innerHTML).toContain('Fetching associated PDB entities');
 	});
 });
